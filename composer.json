@@ -1,0 +1,26 @@
+{
+    "name": "kzxl/lite-export",
+    "description": "High-performance, memory-efficient streaming Excel (XLSX) and CSV export engine in pure PHP 8.2+ with zero external dependencies (< 16MB RAM for 100K+ rows)",
+    "type": "library",
+    "license": "Apache-2.0",
+    "minimum-stability": "stable",
+    "require": {
+        "php": ">=8.2"
+    },
+    "require-dev": {
+        "phpunit/phpunit": "^11.0"
+    },
+    "autoload": {
+        "psr-4": {
+            "LiteExport\\": "src/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "LiteExport\\Tests\\": "tests/"
+        }
+    },
+    "scripts": {
+        "test": "phpunit --colors=always"
+    }
+}
