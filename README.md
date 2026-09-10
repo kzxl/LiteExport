@@ -39,8 +39,8 @@ use LiteExport\Exporter;
 
 // Export from array
 $data = [
-    ['id' => 1, 'name' => 'Nguyễn Văn A', 'price' => 150.00],
-    ['id' => 2, 'name' => 'Trần Thị B', 'price' => 320.50],
+    ['id' => 1, 'name' => 'Alice Johnson', 'price' => 150.00],
+    ['id' => 2, 'name' => 'Bob Smith', 'price' => 320.50],
 ];
 
 Exporter::xlsx($data, '/path/to/report.xlsx', sheetName: 'Customers');
@@ -79,5 +79,6 @@ composer test
 ## 📄 License
 
 MIT License — see [LICENSE](LICENSE) for details.  
-Architected by **Phong Võ** (`kzxl`).
+Architected by **Phong Vo** (`kzxl`).
+
 

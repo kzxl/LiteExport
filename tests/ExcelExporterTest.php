@@ -13,8 +13,8 @@ class ExcelExporterTest extends TestCase
     public function testExportsValidXlsxZipArchive(): void
     {
         $data = [
-            ['id' => 101, 'product' => 'Màn hình công nghiệp', 'price' => 250.75, 'active' => true],
-            ['id' => 102, 'product' => 'Cảm biến quang', 'price' => 45.00, 'active' => false],
+            ['id' => 101, 'product' => 'Industrial Monitor', 'price' => 250.75, 'active' => true],
+            ['id' => 102, 'product' => 'Optical Sensor', 'price' => 45.00, 'active' => false],
         ];
 
         $tempFile = tempnam(sys_get_temp_dir(), 'test_xlsx_') . '.xlsx';

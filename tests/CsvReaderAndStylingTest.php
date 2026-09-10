@@ -8,15 +8,14 @@ use LiteExport\Csv\{CsvExporter, CsvReader};
 use LiteExport\Excel\ExcelExporter;
 use LiteExport\Exporter;
 use PHPUnit\Framework\TestCase;
-use ZipArchive;
 
 final class CsvReaderAndStylingTest extends TestCase
 {
     public function testCsvReaderWithHeaderAndBom(): void
     {
         $data = [
-            ['id' => 10, 'title' => 'Sản phẩm A', 'price' => 100],
-            ['id' => 20, 'title' => 'Sản phẩm B', 'price' => 200],
+            ['id' => 10, 'title' => 'Product A', 'price' => 100],
+            ['id' => 20, 'title' => 'Product B', 'price' => 200],
         ];
 
         $tempFile = tempnam(sys_get_temp_dir(), 'test_reader_') . '.csv';
@@ -26,8 +25,8 @@ final class CsvReaderAndStylingTest extends TestCase
         $rows = CsvReader::toArray($tempFile, hasHeader: true);
 
         $this->assertCount(2, $rows);
-        $this->assertEquals(['id' => '10', 'title' => 'Sản phẩm A', 'price' => '100'], $rows[0]);
-        $this->assertEquals(['id' => '20', 'title' => 'Sản phẩm B', 'price' => '200'], $rows[1]);
+        $this->assertEquals(['id' => '10', 'title' => 'Product A', 'price' => '100'], $rows[0]);
+        $this->assertEquals(['id' => '20', 'title' => 'Product B', 'price' => '200'], $rows[1]);
 
         // Also test Exporter::readCsv facade
         $generator = Exporter::readCsv($tempFile);
