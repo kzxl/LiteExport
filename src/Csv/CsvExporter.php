@@ -30,6 +30,7 @@ class CsvExporter
         string $enclosure = '"',
         string $escapeChar = "\\",
         bool $bom = true,
+        bool $sanitizeFormulas = true,
     ): int {
         $dir = dirname($filePath);
         if (!is_dir($dir)) {
@@ -42,7 +43,7 @@ class CsvExporter
         }
 
         try {
-            return self::toStream($rows, $handle, $headers, $delimiter, $enclosure, $escapeChar, $bom);
+            return self::toStream($rows, $handle, $headers, $delimiter, $enclosure, $escapeChar, $bom, $sanitizeFormulas);
         } finally {
             fclose($handle);
         }
@@ -58,6 +59,7 @@ class CsvExporter
         string $enclosure = '"',
         string $escapeChar = "\\",
         bool $bom = true,
+        bool $sanitizeFormulas = true,
     ): string {
         $handle = fopen('php://temp', 'r+b');
         if ($handle === false) {
@@ -65,7 +67,7 @@ class CsvExporter
         }
 
         try {
-            self::toStream($rows, $handle, $headers, $delimiter, $enclosure, $escapeChar, $bom);
+            self::toStream($rows, $handle, $headers, $delimiter, $enclosure, $escapeChar, $bom, $sanitizeFormulas);
             rewind($handle);
             return (string) stream_get_contents($handle);
         } finally {
@@ -87,6 +89,7 @@ class CsvExporter
         string $enclosure = '"',
         string $escapeChar = "\\",
         bool $bom = true,
+        bool $sanitizeFormulas = true,
     ): int {
         if (!is_resource($stream)) {
             throw new \InvalidArgumentException('Expected a valid stream resource.');
@@ -108,7 +111,12 @@ class CsvExporter
                 $headerWritten = true;
             }
 
-            fputcsv($stream, array_values($rowArray), $delimiter, $enclosure, $escapeChar);
+            $sanitizedValues = array_map(
+                fn($val) => self::sanitizeValue($val, $sanitizeFormulas),
+                array_values($rowArray)
+            );
+
+            fputcsv($stream, $sanitizedValues, $delimiter, $enclosure, $escapeChar);
             $rowCount++;
         }
 
@@ -118,6 +126,22 @@ class CsvExporter
         }
 
         return $rowCount;
+    }
+
+    /**
+     * Sanitize cell value against CSV / Spreadsheet formula injection (OWASP).
+     */
+    private static function sanitizeValue(mixed $value, bool $sanitize): mixed
+    {
+        if (!$sanitize || !is_string($value) || $value === '' || is_numeric($value)) {
+            return $value;
+        }
+
+        if (in_array($value[0], ['=', '+', '-', '@', "\t", "\r"], true)) {
+            return "'" . $value;
+        }
+
+        return $value;
     }
 
     /**

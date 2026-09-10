@@ -25,12 +25,13 @@ class Exporter
         ?array $headers = null,
         string $delimiter = ',',
         bool $bom = true,
+        bool $sanitizeFormulas = true,
     ): string|int {
         if ($filePath !== null) {
-            return CsvExporter::toFile($rows, $filePath, $headers, $delimiter, bom: $bom);
+            return CsvExporter::toFile($rows, $filePath, $headers, $delimiter, bom: $bom, sanitizeFormulas: $sanitizeFormulas);
         }
 
-        return CsvExporter::toString($rows, $headers, $delimiter, bom: $bom);
+        return CsvExporter::toString($rows, $headers, $delimiter, bom: $bom, sanitizeFormulas: $sanitizeFormulas);
     }
 
     /**

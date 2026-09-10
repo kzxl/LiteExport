@@ -46,4 +46,22 @@ class CsvExporterTest extends TestCase
 
         @unlink($tempFile);
     }
+
+    public function testFormulaInjectionMitigation(): void
+    {
+        $maliciousData = [
+            ['name' => '=SUM(1,2)', 'command' => '-2+3+cmd| /C calc!A0', 'normal_negative' => -150, 'text' => '@dangerous'],
+        ];
+
+        $csv = CsvExporter::toString($maliciousData);
+
+        // Formulas starting with =, -, @ should be prefixed with single quote '
+        $this->assertStringContainsString("'=SUM(1,2)", $csv);
+        $this->assertStringContainsString("'-2+3+cmd", $csv);
+        $this->assertStringContainsString("'@dangerous", $csv);
+
+        // Pure numeric negative numbers should NOT be escaped
+        $this->assertStringContainsString("-150", $csv);
+        $this->assertStringNotContainsString("'-150", $csv);
+    }
 }
