@@ -24,6 +24,7 @@ class ExcelExporter
         string $filePath,
         ?array $headers = null,
         string $sheetName = 'Sheet1',
+        array $options = [],
     ): int {
         $dir = dirname($filePath);
         if (!is_dir($dir)) {
@@ -76,7 +77,7 @@ class ExcelExporter
 
             // Assemble .xlsx Zip package
             $sheetXml = (string) file_get_contents($tempSheetPath);
-            self::assembleZip($filePath, $sheetXml, $sheetName);
+            self::assembleZip($filePath, $sheetXml, $sheetName, $options);
 
             return $rowCount;
         } finally {
@@ -92,6 +93,7 @@ class ExcelExporter
         iterable $rows,
         ?array $headers = null,
         string $sheetName = 'Sheet1',
+        array $options = [],
     ): string {
         $tempZip = tempnam(sys_get_temp_dir(), 'lite_xlsx_');
         if ($tempZip === false) {
@@ -99,7 +101,7 @@ class ExcelExporter
         }
 
         try {
-            self::toFile($rows, $tempZip, $headers, $sheetName);
+            self::toFile($rows, $tempZip, $headers, $sheetName, $options);
             return (string) file_get_contents($tempZip);
         } finally {
             @unlink($tempZip);
@@ -145,14 +147,18 @@ class ExcelExporter
         fwrite($stream, "</row>\n");
     }
 
-    private static function assembleZip(string $zipPath, string $sheetXml, string $sheetName): void
+    private static function assembleZip(string $zipPath, string $sheetXml, string $sheetName, array $options = []): void
     {
+        $headerBg = $options['header_bg'] ?? null;
+        $headerColor = $options['header_color'] ?? null;
+        $headerBold = (bool)($options['header_bold'] ?? true);
+
         $zip = new SimpleZip($zipPath);
         $zip->addFromString('[Content_Types].xml', OpenXmlTemplate::contentTypes());
         $zip->addFromString('_rels/.rels', OpenXmlTemplate::packageRels());
         $zip->addFromString('xl/_rels/workbook.xml.rels', OpenXmlTemplate::workbookRels());
         $zip->addFromString('xl/workbook.xml', OpenXmlTemplate::workbook($sheetName));
-        $zip->addFromString('xl/styles.xml', OpenXmlTemplate::styles());
+        $zip->addFromString('xl/styles.xml', OpenXmlTemplate::styles($headerBg, $headerColor, $headerBold));
         $zip->addFromString('xl/worksheets/sheet1.xml', $sheetXml);
         $zip->close();
     }

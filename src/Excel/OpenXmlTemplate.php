@@ -46,21 +46,48 @@ final class OpenXmlTemplate
             . '</workbook>';
     }
 
-    public static function styles(): string
+    public static function styles(?string $headerBg = null, ?string $headerColor = null, bool $headerBold = true): string
     {
-        // Style 0: Normal, Style 1: Bold Header
+        $boldTag = $headerBold ? '<b/>' : '';
+        $colorTag = '';
+        if ($headerColor !== null && $headerColor !== '') {
+            $hex = strtoupper(ltrim($headerColor, '#'));
+            if (strlen($hex) === 6) {
+                $hex = 'FF' . $hex;
+            }
+            $colorTag = "<color rgb=\"{$hex}\"/>";
+        }
+
+        $fillsXml = '<fills count="2"><fill><patternFill patternType="none"/></fill><fill><patternFill patternType="gray125"/></fill></fills>';
+        $headerFillId = 0;
+        $applyFillAttr = '';
+
+        if ($headerBg !== null && $headerBg !== '') {
+            $bgHex = strtoupper(ltrim($headerBg, '#'));
+            if (strlen($bgHex) === 6) {
+                $bgHex = 'FF' . $bgHex;
+            }
+            $fillsXml = '<fills count="3">'
+                . '<fill><patternFill patternType="none"/></fill>'
+                . '<fill><patternFill patternType="gray125"/></fill>'
+                . '<fill><patternFill patternType="solid"><fgColor rgb="' . $bgHex . '"/><bgColor indexed="64"/></patternFill></fill>'
+                . '</fills>';
+            $headerFillId = 2;
+            $applyFillAttr = ' applyFill="1"';
+        }
+
         return '<?xml version="1.0" encoding="UTF-8" standalone="yes"?>'
             . '<styleSheet xmlns="http://schemas.openxmlformats.org/spreadsheetml/2006/main">'
             . '<fonts count="2">'
             . '<font><sz val="11"/><name val="Calibri"/></font>'
-            . '<font><b/><sz val="11"/><name val="Calibri"/></font>'
+            . '<font>' . $boldTag . $colorTag . '<sz val="11"/><name val="Calibri"/></font>'
             . '</fonts>'
-            . '<fills count="1"><fill><patternFill patternType="none"/></fill></fills>'
+            . $fillsXml
             . '<borders count="1"><border><left/><right/><top/><bottom/></border></borders>'
             . '<cellStyleXfs count="1"><xf numFmtId="0" fontId="0" fillId="0" borderId="0"/></cellStyleXfs>'
             . '<cellXfs count="2">'
             . '<xf numFmtId="0" fontId="0" fillId="0" borderId="0" xfId="0"/>'
-            . '<xf numFmtId="0" fontId="1" fillId="0" borderId="0" xfId="0" applyFont="1"/>'
+            . '<xf numFmtId="0" fontId="1" fillId="' . $headerFillId . '" borderId="0" xfId="0" applyFont="1"' . $applyFillAttr . '/>'
             . '</cellXfs>'
             . '</styleSheet>';
     }

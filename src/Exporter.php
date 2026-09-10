@@ -46,11 +46,25 @@ class Exporter
         ?string $filePath = null,
         ?array $headers = null,
         string $sheetName = 'Sheet1',
+        array $options = [],
     ): string|int {
         if ($filePath !== null) {
-            return ExcelExporter::toFile($rows, $filePath, $headers, $sheetName);
+            return ExcelExporter::toFile($rows, $filePath, $headers, $sheetName, $options);
         }
 
-        return ExcelExporter::toString($rows, $headers, $sheetName);
+        return ExcelExporter::toString($rows, $headers, $sheetName, $options);
+    }
+
+    /**
+     * Read CSV file lazily with low memory footprint.
+     *
+     * @return \Generator<int, array<string, mixed>|array<int, mixed>>
+     */
+    public static function readCsv(
+        string $filePath,
+        bool $hasHeader = true,
+        string $delimiter = ',',
+    ): \Generator {
+        return Csv\CsvReader::read($filePath, $hasHeader, $delimiter);
     }
 }
