@@ -1,8 +1,30 @@
 {
     "name": "kzxl/lite-export",
-    "description": "High-performance, memory-efficient streaming Excel (XLSX) and CSV export engine in pure PHP 8.2+ with zero external dependencies (< 16MB RAM for 100K+ rows)",
+    "description": "High-performance, memory-efficient streaming Excel (XLSX) and CSV export engine in pure PHP 8.2+ with zero external dependencies and Formula Injection mitigation (< 16MB RAM for 100K+ rows).",
     "type": "library",
-    "license": "Apache-2.0",
+    "license": "MIT",
+    "homepage": "https://github.com/kzxl/LiteExport",
+    "support": {
+        "issues": "https://github.com/kzxl/LiteExport/issues",
+        "source": "https://github.com/kzxl/LiteExport"
+    },
+    "authors": [
+        {
+            "name": "Phong Vo",
+            "email": "phong.vo@kzxl.com"
+        }
+    ],
+    "keywords": [
+        "export",
+        "excel",
+        "xlsx",
+        "csv",
+        "streaming",
+        "low-memory",
+        "openxml",
+        "formula-injection",
+        "php82"
+    ],
     "minimum-stability": "stable",
     "require": {
         "php": ">=8.2"

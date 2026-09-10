@@ -3,9 +3,9 @@
 Ultra-fast, memory-efficient streaming Excel (.xlsx) and CSV exporter in pure PHP 8.2+ with zero external dependencies (< 16MB RAM for 100K+ rows).
 
 [![PHP 8.2+](https://img.shields.io/badge/PHP-8.2+-blue.svg)](https://php.net)
-[![License: Apache-2.0](https://img.shields.io/badge/License-Apache_2.0-green.svg)](LICENSE)
+[![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
 [![Zero External Dependencies](https://img.shields.io/badge/Dependencies-0%20(Pure%20PHP)-brightgreen.svg)]()
-[![Tests](https://img.shields.io/badge/Tests-4%2F4%20Pass%20(100%25)-brightgreen.svg)]()
+[![Tests](https://img.shields.io/badge/Tests-5%2F5%20Pass%20(100%25)-brightgreen.svg)]()
 
 ---
 
@@ -18,6 +18,7 @@ Standard PHP spreadsheet libraries (such as `phpoffice/phpspreadsheet`) allocate
 - Includes a pure PHP OpenXML Zip packager (`SimpleZip`) utilizing native `zlib`—**runs without even requiring `ext-zip`**.
 - Memory usage stays strictly under **16MB** regardless of dataset size (1,000 or 500,000 rows).
 - Integrates seamlessly with `LiteORM::cursor()` for end-to-end $O(1)$ memory database exports.
+- **CWE-1236 Formula Injection Mitigation**: Automatically sanitizes dangerous spreadsheet trigger prefixes (`=`, `+`, `-`, `@`, `\t`, `\r`) in CSV files.
 
 ---
 
@@ -77,5 +78,6 @@ composer test
 
 ## 📄 License
 
-Released under the **Apache-2.0 License**.  
+MIT License — see [LICENSE](LICENSE) for details.  
 Architected by **Phong Võ** (`kzxl`).
+
