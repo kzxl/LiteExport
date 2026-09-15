@@ -1,5 +1,9 @@
 # LiteExport 📊
 
+[![Latest Version](https://img.shields.io/github/v/release/kzxl/LiteExport?label=version&color=blue)](https://github.com/kzxl/LiteExport/releases)
+[![PHP Version](https://img.shields.io/badge/php-%3E%3D8.2-8892BF.svg)](https://php.net)
+[![License: MIT](https://img.shields.io/badge/License-MIT-green.svg)](LICENSE)
+
 Ultra-fast, memory-efficient streaming Excel (.xlsx) and CSV exporter in pure PHP 8.2+ with zero external dependencies (< 16MB RAM for 100K+ rows).
 
 [![PHP 8.2+](https://img.shields.io/badge/PHP-8.2+-blue.svg)](https://php.net)
@@ -24,8 +28,50 @@ Standard PHP spreadsheet libraries (such as `phpoffice/phpspreadsheet`) allocate
 
 ## 📦 Installation
 
+### Option 1: Standard Composer (via Packagist)
 ```bash
 composer require kzxl/lite-export
+```
+
+### Option 2: Direct from Git Repository (VCS)
+To pull directly from the official GitHub repository without waiting for Packagist synchronization, add the VCS repository to your project's `composer.json`:
+
+```json
+{
+    "repositories": [
+        {
+            "type": "vcs",
+            "url": "https://github.com/kzxl/LiteExport.git"
+        }
+    ],
+    "require": {
+        "kzxl/lite-export": "^1.1.0"
+    }
+}
+```
+Or configure via CLI:
+```bash
+composer config repositories.lite-export vcs https://github.com/kzxl/LiteExport.git
+composer require kzxl/lite-export:^1.1.0
+```
+
+### Option 3: Local Path Repository (Monorepo / Development)
+For local development where changes should reflect immediately via symlink:
+```json
+{
+    "repositories": [
+        {
+            "type": "path",
+            "url": "../libs/LiteExport",
+            "options": {
+                "symlink": true
+            }
+        }
+    ],
+    "require": {
+        "kzxl/lite-export": "@dev"
+    }
+}
 ```
 
 ---
